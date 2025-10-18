@@ -68,67 +68,46 @@ export fn check_winning_state(player_board: board) bool = {
     const previous_turn = player_board.turn;
     const player = player_to_cell(switch_player(previous_turn));
 
-    // check rows
+    // check rows && columns
     for(let col = 0: size; col < len(grid); col += 1){
-        const cond = 0;
+        const row_cond = 0;
+        const col_cond = 0;
 
         for(let row = 0: size; row < len(grid[col]); row += 1){
-            const cell_tick = grid[col][row];
+            const row_tick = grid[col][row];
+            const col_tick = grid[row][col];
             
-            if(cell_tick == player){
-                cond += 1;
+            if(row_tick == player){
+                row_cond += 1;
+            };
+            if(col_tick == player){
+                col_cond += 1;
             };
         };
 
-        if(cond == 3){
+        if(row_cond == 3 || col_cond == 3){
             return true;
         };
     };
 
-    // check cols
-    for(let col = 0: size; col < len(grid); col += 1){
-        const cond = 0;
+    // check diagonals
+    const inverse_cond = 0;
+    const diagonal_cond = 0;
+    const grid_size = len(grid) - 1;
 
-        for(let row = 0: size; row < len(grid[col]); row += 1){
-            const cell_tick = grid[row][col];
-            
-            if(cell_tick == player){
-                cond += 1;
-            };
+    for(let i = 0: size; i =< grid_size; i += 1){
+        const diagonal_tick = grid[i][i];
+        const inverse_tick = grid[i][grid_size - i];
+
+        if(diagonal_tick == player){
+            diagonal_cond += 1;
         };
-
-        if(cond == 3){
-            return true;
-        };
-    };
-
-    // check diagonal
-    const cond = 0;
-
-    for(let i = 0: size; i < len(grid); i += 1){
-        const cell_tick = grid[i][i];
-
-        if(cell_tick == player){
-            cond += 1;
+        if(inverse_tick == player){
+            inverse_cond += 1;
         };
     };
 
-    if(cond == 3){
-        return true;
-    };
-
-    // check anti-diagonal
-    const cond = 0;
-
-    for(let i = len(grid) - 1; i > 0z; i -= 1){
-        const cell_tick = grid[i][i];
-
-        if(cell_tick == player){
-            cond += 1;
-        };
-    };
-
-    if(cond == 3){
+    if(diagonal_cond == 3 || inverse_cond == 3){
         return true;
     };
     return false;
