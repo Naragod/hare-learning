@@ -57,7 +57,7 @@ export fn update_board(player_board: board, play_at: coordinate) board = {
     player_board.position = play_at;
     // update player cell either X or O
     player_board.grid[play_at.x][play_at.y] = player_to_cell(player_board.turn);
-    // end turn
+    // switch player
     player_board.turn = switch_player(player_board.turn);
 
     return player_board;
@@ -65,8 +65,8 @@ export fn update_board(player_board: board, play_at: coordinate) board = {
 
 export fn check_winning_state(player_board: board) bool = {
     const grid = player_board.grid;
-    const turn = player_board.turn;
-    const player = player_to_cell(turn);
+    const previous_turn = player_board.turn;
+    const player = player_to_cell(switch_player(previous_turn));
 
     // check rows
     for(let col = 0: size; col < len(grid); col += 1){
