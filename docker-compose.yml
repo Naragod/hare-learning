@@ -6,7 +6,7 @@ services:
     image: hare-dev:latest
     platform: linux/amd64
     container_name: haredev
-    working_dir: /workspace
+    working_dir: /workspace/src
     tty: true
     stdin_open: true
     volumes:

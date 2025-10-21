@@ -8,6 +8,7 @@ use tooling;
 export fn main() void = {
     let player_board = tooling::board {
         message:str = "...",
+        game_has_ended = false,
         turn = tooling::player_turn::FIRST,
         position = tooling::coordinate {x = 0, y = 0},
         grid: [3][3]tooling::cell = [
@@ -20,6 +21,14 @@ export fn main() void = {
     for(true){
         tooling::clear_screen();
         tooling::draw_board(player_board);
+        const has_won = player_board.game_has_ended;
+
+        if(has_won){
+            const winner = tooling::switch_player(player_board.turn);
+            const player = tooling::player_to_cell(winner);
+            fmt::printfln("Player: {} won", tooling::cell_to_char(player))!;
+            break;
+        };
         const user_string = tooling::read_line();
         
         if(user_string == "quit" || user_string == "__end__"){
@@ -28,13 +37,6 @@ export fn main() void = {
 
         const position = tooling::parse_coordinates(user_string);
         player_board = tooling::update_board(player_board, position);
-        const has_won = tooling::check_winning_state(player_board);
-
-        if(has_won){
-            const player = tooling::player_to_cell(player_board.turn);
-            fmt::printfln("Player: {} won", tooling::cell_to_char(player))!;
-            break;
-        };
     };
     fmt::printfln("Program terminated")!;
 };

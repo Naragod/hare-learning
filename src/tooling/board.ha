@@ -13,7 +13,8 @@ export type board = struct {
     message: str,
     grid: [][]cell,
     turn: player_turn,
-    position: coordinate
+    position: coordinate,
+    game_has_ended: bool
 };
 
 export fn switch_player(player: player_turn) player_turn = {
@@ -57,6 +58,10 @@ export fn update_board(player_board: board, play_at: coordinate) board = {
     player_board.position = play_at;
     // update player cell either X or O
     player_board.grid[play_at.x][play_at.y] = player_to_cell(player_board.turn);
+    
+    // set game state
+    player_board.game_has_ended = check_winning_state(player_board);
+
     // switch player
     player_board.turn = switch_player(player_board.turn);
 
@@ -65,8 +70,7 @@ export fn update_board(player_board: board, play_at: coordinate) board = {
 
 export fn check_winning_state(player_board: board) bool = {
     const grid = player_board.grid;
-    const previous_turn = player_board.turn;
-    const player = player_to_cell(switch_player(previous_turn));
+    const player = player_to_cell(player_board.turn);
 
     // check rows && columns
     for(let col = 0: size; col < len(grid); col += 1){
@@ -95,7 +99,7 @@ export fn check_winning_state(player_board: board) bool = {
     const diagonal_cond = 0;
     const grid_size = len(grid) - 1;
 
-    for(let i = 0: size; i =< grid_size; i += 1){
+    for(let i = 0: size; i <= grid_size; i += 1){
         const diagonal_tick = grid[i][i];
         const inverse_tick = grid[i][grid_size - i];
 
