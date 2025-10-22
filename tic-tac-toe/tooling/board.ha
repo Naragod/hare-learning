@@ -69,14 +69,28 @@ export fn update_board(player_board: board, play_at: coordinate) board = {
 };
 
 export fn check_winning_state(player_board: board) bool = {
+    const inverse_cond = 0;
+    const diagonal_cond = 0;
     const grid = player_board.grid;
+    const grid_size = len(grid) - 1;
     const player = player_to_cell(player_board.turn);
 
-    // check rows && columns
     for(let col = 0: size; col < len(grid); col += 1){
         const row_cond = 0;
         const col_cond = 0;
+        
+        // check diagonals
+        const diagonal_tick = grid[i][i];
+        const inverse_tick = grid[i][grid_size - i];
 
+        if(diagonal_tick == player){
+            diagonal_cond += 1;
+        };
+        if(inverse_tick == player){
+            inverse_cond += 1;
+        };
+
+        // check rows && columns
         for(let row = 0: size; row < len(grid[col]); row += 1){
             const row_tick = grid[col][row];
             const col_tick = grid[row][col];
@@ -92,27 +106,10 @@ export fn check_winning_state(player_board: board) bool = {
         if(row_cond == 3 || col_cond == 3){
             return true;
         };
-    };
 
-    // check diagonals
-    const inverse_cond = 0;
-    const diagonal_cond = 0;
-    const grid_size = len(grid) - 1;
-
-    for(let i = 0: size; i <= grid_size; i += 1){
-        const diagonal_tick = grid[i][i];
-        const inverse_tick = grid[i][grid_size - i];
-
-        if(diagonal_tick == player){
-            diagonal_cond += 1;
+        if(diagonal_cond == 3 || inverse_cond == 3){
+            return true;
         };
-        if(inverse_tick == player){
-            inverse_cond += 1;
-        };
-    };
-
-    if(diagonal_cond == 3 || inverse_cond == 3){
-        return true;
     };
     return false;
 };
