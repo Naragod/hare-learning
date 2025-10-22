@@ -80,8 +80,8 @@ export fn check_winning_state(player_board: board) bool = {
         const col_cond = 0;
         
         // check diagonals
-        const diagonal_tick = grid[i][i];
-        const inverse_tick = grid[i][grid_size - i];
+        const diagonal_tick = grid[col][col];
+        const inverse_tick = grid[col][grid_size - col];
 
         if(diagonal_tick == player){
             diagonal_cond += 1;
